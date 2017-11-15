@@ -2,3 +2,9 @@
     font-size: 24;
     color: rgb(255, 255, 255);
 }
+.logo{
+    object-fit: none; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    height: 400px;
+    width: 2560px;
+}
