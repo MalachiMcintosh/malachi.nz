@@ -3,6 +3,11 @@
     color: rgb(255, 255, 255);
 }
 
+.grid {
+    display: grid;
+    place-items: center;
+}
+
 .logo {
     object-fit: none;
     /* Do not scale the image */
@@ -12,3 +17,16 @@
     height: 400px;
     position: relative;
 }
+
+body::-webkit-scrollbar {
+    width: 0.25rem;
+}
+
+body::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #000000;
+}
+
