@@ -7,11 +7,12 @@ import org.mockito.stubbing.Answer;
 import java.util.*;
 import java.util.logging.Logger;
 
+import com.google.gson.*;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
 
 /**
  * Unit test for Function class.
@@ -28,7 +29,11 @@ public class FunctionTest {
 
         final Map<String, String> queryParams = new HashMap<>();
         queryParams.put("id", "count");
+        
+
+        when(req.getHttpMethod()).thenReturn(HttpMethod.GET);
         doReturn(queryParams).when(req).getQueryParameters();
+        
 
         final Optional<String> queryBody = Optional.empty();
         doReturn(queryBody).when(req).getBody();
@@ -44,18 +49,34 @@ public class FunctionTest {
         final ExecutionContext context = mock(ExecutionContext.class);
         doReturn(Logger.getGlobal()).when(context).getLogger();
 
-        // Invoke
-        // final HttpResponseMessage ret = new Function().run(req, context);
+        @SuppressWarnings("unchecked")
+        OutputBinding<Counter> out = mock(OutputBinding.class);
+        Counter counter = new Counter(1);
+
+        Gson gson = new Gson();
+        String counterJson = gson.toJson(counter);
+        Optional<String> opt = Optional.of(counterJson);
+        final Counter result = new Counter();
+
+        doAnswer(new Answer<Counter>() {
+            @Override
+            public Counter answer(InvocationOnMock invocation) {
+                Counter arg = (Counter) invocation.getArguments()[0];
+                int count = arg.getCount();
+                result.setCount(count);
+                return result;
+            }
+        }).when(out).setValue(any(Counter.class));
+
+        when(out.getValue()).thenReturn(result);
+
+        Logger.getGlobal().info(req.getQueryParameters().toString());
         
-        // Optional<String>  opt = Optional.empty();        
-        Optional<String>  opt = Optional.of("count");        
-        OutputBinding<Counter> out = (OutputBinding<Counter>)mock(OutputBinding.class);
-        // Logger.getGlobal().info(req.getQueryParameters().toString());
-        final HttpResponseMessage ret = new Function().getCVPageCount(req, opt, out, context);
-        // final HttpResponseMessage ret = new Function().getCVPageCount(req, opt, context);
+        final HttpResponseMessage ret = Function.getCVPageCount(req, opt, out, context);
 
         // Verify
-        assertEquals(ret.getStatus(), HttpStatus.OK);
-        assertEquals(ret.getBody(), "Counter in progress");
+        assertEquals(HttpStatus.OK, ret.getStatus());
+        assertEquals(2, out.getValue().getCount());
+
     }
 }

@@ -12,14 +12,12 @@ public class Counter {
     private String _etag;
     private Integer currentCount;
     private Boolean isComplete;
-
-    // public Counter(){
-    //     this.currentCount = 0;
-    //     this.id = "count";
-    //     this.isComplete = false;
-    // }
-
+    
     public Counter(){
+    }
+
+    public Counter(int count){
+        this.currentCount = count;
     }
 
     public Integer getCount(){
@@ -32,6 +30,10 @@ public class Counter {
 
     public void increment(){
         this.currentCount = getCount().intValue()+1;
+    }
+
+    public void setCount(int count){
+        this.currentCount = count;
     }
 
     @Override
