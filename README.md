@@ -1,2 +1,2 @@
-# MalachiMcintosh.github.io
+# malachi.nz
 Personal Website
