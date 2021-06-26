@@ -1,44 +1,71 @@
-name: AzFunc, Blob storage website CI
+name: AzFunc, Blob storage website CD
 
 on:
   push:
     branches: [master]
 
+env:
+  AZURE_FUNCTIONAPP_NAME: "malachiscvpagecounter"
+  POM_XML_DIRECTORY: "functionApp"
+  POM_FUNCTIONAPP_NAME: "cvPageCounter-1618432004182"
+  JAVA_VERSION: '11'
+
 jobs:
-  build_java:
+  build_and_deploy_function_app:
     runs-on: ubuntu-latest
     steps:
+      - name: Check for changed files in functionApp
+        id: changed-files-functionApp
+        uses: tj-actions/changed-files@v8.3
+        with:
+          files: |
+            functionApp
       - uses: actions/checkout@v2
-      - name: Set up JDK 11
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v2
         with:
-          java-version: "11"
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: "adopt"
+        if: steps.changed-files-functionApp.outputs.any_changed == 'true'
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify --file ./functionApp/pom.xml
-  upload_blob:
-    needs: build_java
+        run: mvn clean package --file './${{ env.POM_XML_DIRECTORY }}/pom.xml'
+        if: steps.changed-files-functionApp.outputs.any_changed == 'true'
+      - name: Azure Functions Action
+        uses: Azure/functions-action@v1.4.0
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: './${{ env.POM_XML_DIRECTORY }}/target/azure-functions/${{ env.POM_FUNCTIONAPP_NAME }}'
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        if: steps.changed-files-functionApp.outputs.any_changed == 'true'
+  upload_site_blob:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Check for changed files in site
+        id: changed-files-site
+        uses: tj-actions/changed-files@v8.3
+        with:
+          files: |
+            site
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+        if: steps.changed-files-site.outputs.any_changed == 'true'
       - name: Upload to blob storage
         uses: azure/CLI@v1
         with:
           azcliversion: 2.0.72
           inlineScript: |
-            az storage blob upload-batch --account-name cvpage -d '$web' -s .
+            az storage blob upload-batch --account-name cvpage -d '$web' -s ./site
+        if: steps.changed-files-site.outputs.any_changed == 'true'
       - name: Purge CDN endpoint
         uses: azure/CLI@v1
         with:
           azcliversion: 2.0.72
           inlineScript: |
             az cdn endpoint purge --content-paths  "/*" --profile-name "malachiscvcdn" --name "malachiscvcdnendpoint" --resource-group "malachiscvpagecounter"
-
-      # Azure logout
-      - name: logout
+        if: steps.changed-files-site.outputs.any_changed == 'true'
+      - name: Azure logout
         run: |
           az logout
+        if: steps.changed-files-site.outputs.any_changed == 'true'
