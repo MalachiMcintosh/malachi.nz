@@ -14,13 +14,15 @@ jobs:
   build_and_deploy_function_app:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Check for changed files in functionApp
         id: changed-files-functionApp
         uses: tj-actions/changed-files@v8.3
         with:
           files: |
             functionApp
-      - uses: actions/checkout@v2
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v2
         with:
@@ -41,6 +43,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Check for changed files in site
         id: changed-files-site
         uses: tj-actions/changed-files@v8.3
