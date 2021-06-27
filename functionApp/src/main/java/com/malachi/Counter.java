@@ -28,6 +28,10 @@ public class Counter {
         return this.currentCount.toString();
     }
 
+    public Boolean getIsComplete(){
+        return this.isComplete;
+    }
+
     public void increment(){
         this.currentCount = getCount().intValue()+1;
     }
