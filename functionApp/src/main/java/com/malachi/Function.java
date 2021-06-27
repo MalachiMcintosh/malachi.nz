@@ -34,7 +34,7 @@ public class Function {
         Gson gson = new Gson();
         String itemFromDB = item.get();
         context.getLogger().info("counter: " + itemFromDB);
-        Counter counter = gson.fromJson(itemFromDB, Counter.class); // deserializes json into Counter
+        Counter counter = gson.fromJson(itemFromDB, Counter.class); // deserializes json into Counter...
         Counter updated = counter;
         updated.increment();
         update.setValue(updated);
