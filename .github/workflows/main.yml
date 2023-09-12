@@ -58,14 +58,12 @@ jobs:
       - name: Upload to blob storage
         uses: azure/CLI@v1
         with:
-          azcliversion: 2.0.72
           inlineScript: |
             az storage blob upload-batch --account-name cvpage -d '$web' -s ./site
         if: steps.changed-files-site.outputs.any_changed == 'true'
       - name: Purge CDN endpoint
         uses: azure/CLI@v1
         with:
-          azcliversion: 2.0.72
           inlineScript: |
             az cdn endpoint purge --content-paths  "/*" --profile-name "malachiscvcdn" --name "malachiscvcdnendpoint" --resource-group "malachiscvpagecounter"
         if: steps.changed-files-site.outputs.any_changed == 'true'
