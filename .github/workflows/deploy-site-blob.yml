@@ -1,0 +1,42 @@
+name: malachi.nz
+
+on:
+  push:
+    branches: [master]
+
+env:
+  AZURE_FUNCTIONAPP_NAME: "malachiscvpagecounter"
+  POM_XML_DIRECTORY: "functionApp"
+  POM_FUNCTIONAPP_NAME: "cvPageCounter-1618432004182"
+  JAVA_VERSION: '11'
+
+jobs:
+  upload_site_blob:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Check for changed files in site
+        id: changed-files-site
+        uses: tj-actions/changed-files@v8.3
+        with:
+          files: |
+            site
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        if: steps.changed-files-site.outputs.any_changed == 'true'
+      - name: Upload to blob storage
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az storage blob upload-batch --account-name cvpage -d '$web' -s ./site
+      - name: Purge CDN endpoint
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az cdn endpoint purge --content-paths  "/*" --profile-name "malachiscvcdn" --name "malachiscvcdnendpoint" --resource-group "malachi-nz" --subscription "1dffdd1f-4b13-4a77-8cd1-2cc30362fd92"
+      - name: Azure logout
+        run: |
+          az logout
