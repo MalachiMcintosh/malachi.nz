@@ -65,7 +65,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az cdn endpoint purge --content-paths  "/*" --profile-name "malachiscvcdn" --name "malachiscvcdnendpoint" --resource-group "malachiscvpagecounter"
+            az cdn endpoint purge --content-paths  "/*" --profile-name "malachiscvcdn" --name "malachiscvcdnendpoint" --resource-group "malachi-nz" --subscription "1dffdd1f-4b13-4a77-8cd1-2cc30362fd92"
         if: steps.changed-files-site.outputs.any_changed == 'true'
       - name: Azure logout
         run: |
