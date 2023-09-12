@@ -1,5 +1,7 @@
 name: deploy-site-blob
 
+on: workflow_dispatch
+
 env:
   AZURE_FUNCTIONAPP_NAME: "malachiscvpagecounter"
   POM_XML_DIRECTORY: "functionApp"
