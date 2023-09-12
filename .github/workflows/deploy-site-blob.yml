@@ -1,8 +1,4 @@
-name: malachi.nz
-
-on:
-  push:
-    branches: [master]
+name: deploy-site-blob
 
 env:
   AZURE_FUNCTIONAPP_NAME: "malachiscvpagecounter"
