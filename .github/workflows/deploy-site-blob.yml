@@ -15,21 +15,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Check for changed files in site
-        id: changed-files-site
-        uses: tj-actions/changed-files@v8.3
-        with:
-          files: |
-            site
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-        if: steps.changed-files-site.outputs.any_changed == 'true'
       - name: Upload to blob storage
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload-batch --account-name cvpage -d '$web' -s ./site
+            az storage blob upload-batch --account-name cvpage -d '$web' -s ./site --overwrite
       - name: Purge CDN endpoint
         uses: azure/CLI@v1
         with:
