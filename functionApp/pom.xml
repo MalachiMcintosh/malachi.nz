@@ -11,9 +11,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
-        <azure.functions.maven.plugin.version>1.10.1</azure.functions.maven.plugin.version>
-        <azure.functions.java.library.version>1.4.2</azure.functions.java.library.version>
+        <java.version>17</java.version>
+        <azure.functions.maven.plugin.version>1.27.0</azure.functions.maven.plugin.version>
+        <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <functionAppName>cvPageCounter-1618432004182</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
     </properties>
@@ -22,7 +22,7 @@
     <dependency>
   <groupId>com.microsoft.azure</groupId>
   <artifactId>azure-documentdb</artifactId>
-  <version>2.6.1</version>
+  <version>2.6.5</version>
 </dependency>
         <dependency>
         <groupId>com.google.code.gson</groupId>
