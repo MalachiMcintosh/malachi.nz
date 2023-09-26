@@ -25,10 +25,10 @@ public class Function {
     public static HttpResponseMessage getCVPageCount(@HttpTrigger(name = "req", methods = {
             HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
             @CosmosDBInput(name = "pagecounterdb", databaseName = "pagecounterdb", 
-            collectionName = "pagecounterdbcontainer", id = "{Query.id}", partitionKey = "{Query.id}", 
-            connectionStringSetting = "CosmosDbConnectionString") Optional<String> item,
+            containerName = "pagecounterdbcontainer", id = "{Query.id}", partitionKey = "{Query.id}", 
+            connection = "CosmosDbConnectionString") Optional<String> item,
             @CosmosDBOutput(name = "pagecounterdbupdate", databaseName = "pagecounterdb", 
-            collectionName = "pagecounterdbcontainer", connectionStringSetting = "CosmosDbConnectionString") 
+            containerName = "pagecounterdbcontainer", connection = "CosmosDbConnectionString") 
             OutputBinding<Counter> update,
             final ExecutionContext context) {
         Gson gson = new Gson();
