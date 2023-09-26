@@ -6,7 +6,7 @@ env:
   AZURE_FUNCTIONAPP_NAME: "malachiscvpagecounter"
   POM_XML_DIRECTORY: "functionApp"
   POM_FUNCTIONAPP_NAME: "cvPageCounter-1618432004182"
-  JAVA_VERSION: '11'
+  JAVA_VERSION: '17'
 
 jobs:
   upload_site_blob:
