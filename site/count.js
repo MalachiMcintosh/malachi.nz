@@ -16,7 +16,7 @@ const getCVPageVisitCount = () => {
     .then((response) => {
       console.log("Website called function API.");
       count = response.currentCount;
-      document.getElementById("count").innerText = `Page viewed ${count}* times.`;
+      document.getElementById("count").innerText = `Page viewed ${count} times.`;
     })
     .catch(function (error) {
       console.log(error);
