@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
       - name: Check for changed files in functionApp
         id: changed-files-functionApp
-        uses: tj-actions/changed-files@v8.3
+        uses: tj-actions/changed-files@v41
         with:
           files: |
             functionApp
@@ -47,7 +47,7 @@ jobs:
           fetch-depth: 0
       - name: Check for changed files in site
         id: changed-files-site
-        uses: tj-actions/changed-files@v8.3
+        uses: tj-actions/changed-files@v41
         with:
           files: |
             site
